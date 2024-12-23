@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <iomanip>
 #include <ctime>
 
@@ -22,8 +22,9 @@ double sumOfOddElements(double* row, int n);
 void Task5();
 void ShowMatrDoubleInfo(double** matr, int m, int n);
 void Task6();
+void MultMatrDouble(double** matr1, int m1, int nm, int n2, double* vectorr, double* multMatr);
 void Task7();
-void MultMatr(int** matr1, int m1, int nm, int n2, int** matr2, int** multMatr);
+void MultMatrInt(int** matr1, int m1, int nm, int n2, int** matr2, int** multMatr);
 
 int main()
 {
@@ -202,7 +203,7 @@ void SortByStr(double** matr, int m, int n) {
 double sumOfOddElements(double* row, int n) {
 	double sum = 0.0;
 	for (int j = 0; j < n; ++j) {
-		if (j % 2 != 0) {
+		if ((int)row[j] % 2 != 0) {
 			sum += row[j];
 		}
 	}
@@ -220,47 +221,86 @@ void Task5() {
 }
 
 void ShowMatrDoubleInfo(double** matr, int m, int n) {
-	for (int i = 0; i < m; i++) {
+    int** mass = new int*[3];
+	for (int i = 0; i < n; i++) {
+        mass[i] = new int[n];
 		int zero = 0, below = 0, after = 0;
 		for (int j = 0; j < n; j++) {
-			if (matr[i][j] < 0.0)below++;
-			else if (matr[i][j] > 0.0)after++;
+			if (matr[j][i] < 0.0)below++;
+			else if (matr[j][i] > 0.0)after++;
 			else zero++;
-			cout << setw(7) << matr[i][j] << " ";
+			if (i==0)
+                cout << setw(20) << matr[i][j] << " ";
+            else
+                cout << setw(3) << matr[i][j] << " ";
+            mass[0][j] = below;
+            mass[1][j] = after;
+            mass[2][j] = zero;
 		}
-		cout << endl << "меньше нуля = " << below << ", больше нуля = " << after << ", нулей = " << zero << endl;
 	}
+	for (int i = 0;i<3;i++){
+        if (i==0)
+            cout<<"меньше нуля = ";
+        else if (i == 1)
+            cout<<"больше нуля = ";
+        else
+            cout<<"равно нуля = ";
+
+        for (int j = 0; j<n;j++){
+            cout<<mass[i][j];
+        }
+	}
+
+		//cout << setw(100)<<endl << "меньше нуля = " << below << ", больше нуля = " << after << ", нулей = " << zero << endl;
 }
 
 void Task6() {
 	int* len1 = new int[2];
 	Len(len1);
 
-	int* len2 = new int[2] {len1[0], 1};
+	int len2 = len1[0];
 
 	cout << "1 matrix" << endl;
 	double** matr1 = new double* [len1[0]];
-	CreateMatrInt(matr1, len1[0], len1[1]);
-	ShowMatrInt(matr1, len1[0], len1[1]);
+	CreateMatrDouble(matr1, len1[0], len1[1]);
+	ShowMatrDouble(matr1, len1[0], len1[1]);
 
 
 	cout << endl << endl << "vector" << endl;
 
-	double** matr2 = new double* [len2[0]];
-	CreateMatrInt(matr2, len2[0], len2[1]);
-	ShowMatrInt(matr2, len2[0], len2[1]);
+	double* vectorr = new double [len2];
+    for (int i = 0;i<len2;i++){
+        vectorr[i] = 0.01 * (rand() % 20000 - 10000);
+        cout<<setw(7)<<vectorr[i];
+    }
 
 
 	cout << endl << endl << "mult matrix" << endl;
 
-	double** multMatr = new double* [len1[0]];
-	MultMatr(matr1, len1[0], len1[1], len2[1], matr2, multMatr);
-	ShowMatrInt(multMatr, len1[0], len2[1]);
+	double* multMatr = new double[len1[0]];
+	MultMatrDouble(matr1, len1[0], len1[1], 1, vectorr, multMatr);
+	for (int i = 0;i<len1[0];i++){
+        cout<<setw(7)<<multMatr[i];
+    }
 
 
-	deleteMatrInt(multMatr, len1[0]);
-	deleteMatrInt(matr2, len2[0]);
-	deleteMatrInt(matr1, len1[0]);
+	delete[] multMatr;
+	delete[] vectorr;
+	deleteMatrDouble(matr1, len1[0]);
+}
+
+void MultMatrDouble(double** matr1, int m1, int nm, int n2, double* vectorr, double* multMatr) {
+	for (int i = 0; i < m1; ++i)
+        multMatr[i] = 0.0;
+
+	for (int i1 = 0; i1 < m1; i1++) {
+		for (int j1 = 0; j1 < n2; j1++) {
+			multMatr[i1] = 0.0;
+			for (int i = 0; i < nm; i++) {
+				multMatr[i1] += matr1[i1][i] * vectorr[j1];
+			}
+		}
+	}
 }
 
 void Task7() {
@@ -277,30 +317,30 @@ void Task7() {
 
 	cout << "1 matrix" << endl;
 	int** matr1 = new int* [len1[0]];
-	CreateMatrDouble(matr1, len1[0], len1[1]);
-	ShowMatrDouble(matr1, len1[0], len1[1]);
+	CreateMatrInt(matr1, len1[0], len1[1]);
+	ShowMatrInt(matr1, len1[0], len1[1]);
 
 
 	cout << endl << endl << "2 matrix" << endl;
 
 	int** matr2 = new int* [len2[0]];
-	CreateMatrDouble(matr2, len2[0], len2[1]);
-	ShowMatrDouble(matr2, len2[0], len2[1]);
+	CreateMatrInt(matr2, len2[0], len2[1]);
+	ShowMatrInt(matr2, len2[0], len2[1]);
 
 
 	cout << endl << endl << "mult matrix" << endl;
 
 	int** multMatr = new int* [len1[0]];
-	MultMatr(matr1, len1[0], len1[1], len2[1], matr2, multMatr);
-	ShowMatrDouble(multMatr, len1[0], len2[1]);
+	MultMatrInt(matr1, len1[0], len1[1], len2[1], matr2, multMatr);
+	ShowMatrInt(multMatr, len1[0], len2[1]);
 
 
-	deleteMatrDouble(multMatr, len1[0]);
-	deleteMatrDouble(matr2, len2[0]);
-	deleteMatrDouble(matr1, len1[0]);
+	deleteMatrInt(multMatr, len1[0]);
+	deleteMatrInt(matr2, len2[0]);
+	deleteMatrInt(matr1, len1[0]);
 }
 
-void MultMatr(double** matr1, int m1, int nm, int n2, double** matr2, double** multMatr) {
+void MultMatrInt(int** matr1, int m1, int nm, int n2, int** matr2, int** multMatr) {
 	for (int i = 0; i < m1; i++)
 		multMatr[i] = new int[n2];
 
