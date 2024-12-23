@@ -239,21 +239,21 @@ void Task6() {
 	int* len2 = new int[2] {len1[0], 1};
 
 	cout << "1 matrix" << endl;
-	int** matr1 = new int* [len1[0]];
+	double** matr1 = new double* [len1[0]];
 	CreateMatrInt(matr1, len1[0], len1[1]);
 	ShowMatrInt(matr1, len1[0], len1[1]);
 
 
-	cout << endl << endl << "2 matrix" << endl;
+	cout << endl << endl << "vector" << endl;
 
-	int** matr2 = new int* [len2[0]];
+	double** matr2 = new double* [len2[0]];
 	CreateMatrInt(matr2, len2[0], len2[1]);
 	ShowMatrInt(matr2, len2[0], len2[1]);
 
 
 	cout << endl << endl << "mult matrix" << endl;
 
-	int** multMatr = new int* [len1[0]];
+	double** multMatr = new double* [len1[0]];
 	MultMatr(matr1, len1[0], len1[1], len2[1], matr2, multMatr);
 	ShowMatrInt(multMatr, len1[0], len2[1]);
 
@@ -277,36 +277,36 @@ void Task7() {
 
 	cout << "1 matrix" << endl;
 	int** matr1 = new int* [len1[0]];
-	CreateMatrInt(matr1, len1[0], len1[1]);
-	ShowMatrInt(matr1, len1[0], len1[1]);
+	CreateMatrDouble(matr1, len1[0], len1[1]);
+	ShowMatrDouble(matr1, len1[0], len1[1]);
 
 
 	cout << endl << endl << "2 matrix" << endl;
 
 	int** matr2 = new int* [len2[0]];
-	CreateMatrInt(matr2, len2[0], len2[1]);
-	ShowMatrInt(matr2, len2[0], len2[1]);
+	CreateMatrDouble(matr2, len2[0], len2[1]);
+	ShowMatrDouble(matr2, len2[0], len2[1]);
 
 
 	cout << endl << endl << "mult matrix" << endl;
 
 	int** multMatr = new int* [len1[0]];
 	MultMatr(matr1, len1[0], len1[1], len2[1], matr2, multMatr);
-	ShowMatrInt(multMatr, len1[0], len2[1]);
+	ShowMatrDouble(multMatr, len1[0], len2[1]);
 
 
-	deleteMatrInt(multMatr, len1[0]);
-	deleteMatrInt(matr2, len2[0]);
-	deleteMatrInt(matr1, len1[0]);
+	deleteMatrDouble(multMatr, len1[0]);
+	deleteMatrDouble(matr2, len2[0]);
+	deleteMatrDouble(matr1, len1[0]);
 }
 
-void MultMatr(int** matr1, int m1, int nm, int n2, int** matr2, int** multMatr) {
+void MultMatr(double** matr1, int m1, int nm, int n2, double** matr2, double** multMatr) {
 	for (int i = 0; i < m1; i++)
 		multMatr[i] = new int[n2];
 
 	for (int i = 0; i < m1; ++i)
 		for (int j = 0; j < n2; ++j)
-			multMatr[i][j] = 0;
+			multMatr[i][j] = 0.0;
 
 	for (int i1 = 0; i1 < m1; i1++) {
 		for (int j1 = 0; j1 < n2; j1++) {
